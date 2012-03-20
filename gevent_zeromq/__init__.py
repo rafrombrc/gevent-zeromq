@@ -27,7 +27,7 @@ zmq.Poller = zmq._Poller
 def monkey_patch(test_suite=False):
     """
     Monkey patches `zmq.Context` and `zmq.Socket`
-    
+
     If test_suite is True, the pyzmq test suite will be patched for
     compatibility as well.
     """
@@ -35,7 +35,10 @@ def monkey_patch(test_suite=False):
     ozmq.Socket = zmq.Socket
     ozmq.Context = zmq.Context
     ozmq.Poller = zmq.Poller
-	
+
+    ioloop = __import__('zmq.eventloop.ioloop')
+    ioloop.Poller = zmq.Poller
+
     if test_suite:
         from gevent_zeromq.tests import monkey_patch_test_suite
         monkey_patch_test_suite()

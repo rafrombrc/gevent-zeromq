@@ -20,9 +20,13 @@ to trigger needed events.
 """
 
 import gevent_zeromq.core as zmq
+
 zmq.Context = zmq._Context
 zmq.Socket = zmq._Socket
 zmq.Poller = zmq._Poller
+
+IOLOOP_IS_MONKEYPATCHED = False
+
 
 def monkey_patch(test_suite=False):
     """
@@ -38,6 +42,9 @@ def monkey_patch(test_suite=False):
 
     ioloop = __import__('zmq.eventloop.ioloop')
     ioloop.Poller = zmq.Poller
+
+    global IOLOOP_IS_MONKEYPATCHED
+    IOLOOP_IS_MONKEYPATCHED = True
 
     if test_suite:
         from gevent_zeromq.tests import monkey_patch_test_suite

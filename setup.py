@@ -9,7 +9,6 @@ cython_available = False
 try:
     from Cython.Distutils import build_ext
     from Cython.Distutils.extension import Extension
-    from Cython.Build import cythonize
     cython_available = True
 except ImportError, e:
     pass
@@ -34,7 +33,7 @@ def get_ext_modules():
         print 'WARNING: pyzmq(>=2.1.0) must be installed to build cython version of gevent-zeromq (%s).' % e
         return []
 
-    return cythonize(["*.pyx"])
+    return [Extension('gevent_zeromq.core', ['gevent_zeromq/core.pyx'], include_dirs=zmq.get_includes())]
 
 
 class TestCommand(Command):
